@@ -7,6 +7,10 @@ import importPlugin from "eslint-plugin-import";
 import eslintPluginUnicorn from "eslint-plugin-unicorn";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import jsxA11y from "eslint-plugin-jsx-a11y";
+import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
+import reactPlugin from "eslint-plugin-react";
+import tailwind from "eslint-plugin-tailwindcss";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -16,11 +20,22 @@ export default [
   {
     files: ["src/**/*.{js,mjs,cjs,ts,jsx,tsx}"],
   },
-  { languageOptions: { globals: globals.browser } },
+  {
+    languageOptions: {
+      globals: globals.browser,
+      ecmaVersion: "latest",
+      sourceType: "module",
+    },
+  },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
   pluginReact.configs.flat.recommended,
   includeIgnoreFile(gitignorePath),
+  jsxA11y.flatConfigs.recommended,
+  eslintPluginPrettierRecommended,
+  reactPlugin.configs.flat.recommended,
+  reactPlugin.configs.flat["jsx-runtime"],
+  ...tailwind.configs["flat/recommended"],
   {
     settings: {
       react: {

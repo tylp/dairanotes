@@ -1,4 +1,3 @@
-import React from "react";
 import { useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { Notes } from "@/features/notes";
@@ -17,7 +16,6 @@ export function App() {
       <h1>Welcome to Tauri!</h1>
 
       <form
-        className="row"
         onSubmit={(e) => {
           e.preventDefault();
           greet();
