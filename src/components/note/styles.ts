@@ -10,10 +10,10 @@ export const noteStyles = cva("", {
       yellow: "bg-[#ffffa0]",
     },
     padding: {
-      none: "p-0 rounded-md",
-      sm: "p-2 rounded-lg",
-      md: "p-4 rounded-xl",
-      lg: "p-6 rounded-2xl",
+      none: "rounded-md p-0",
+      sm: "rounded-lg p-2",
+      md: "rounded-xl p-4",
+      lg: "rounded-2xl p-6",
     },
   },
 });
