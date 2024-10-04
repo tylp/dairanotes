@@ -4,12 +4,6 @@ use tauri::State;
 
 use crate::{note::Note, AppState};
 
-/// Return a string formated with the given name.
-#[tauri::command]
-pub fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
-}
-
 /// Return a list of notes.
 #[tauri::command]
 pub fn notes_index(state: State<'_, Mutex<AppState>>) -> Vec<Note> {
