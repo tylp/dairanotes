@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Note } from "../types/note";
 import { invoke } from "@tauri-apps/api/core";
 
-const queryFn = (): Promise<{ data: Note[] }> => {
+const queryFn = (): Promise<Note[]> => {
   return invoke("notes_index");
 };
 
