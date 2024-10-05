@@ -1,5 +1,3 @@
-use std::sync::Arc;
-
 use crate::api::HttpClient;
 use anyhow::Result;
 
@@ -8,12 +6,12 @@ use super::Note;
 /// Handler to communicate with the server through the notes API.
 #[derive(Debug)]
 pub struct NoteApi {
-    client: Arc<HttpClient>,
+    client: HttpClient,
     slug: String,
 }
 
 impl NoteApi {
-    pub fn new(slug: String, client: Arc<HttpClient>) -> Self {
+    pub fn new(slug: String, client: HttpClient) -> Self {
         Self { client, slug }
     }
 
