@@ -2,7 +2,6 @@ use anyhow::Result;
 use serde::de::DeserializeOwned;
 use tauri_plugin_http::reqwest;
 
-/// Struct that wrap the HTTP library.
 #[derive(Debug)]
 pub struct HttpClient {
     client: reqwest::Client,
