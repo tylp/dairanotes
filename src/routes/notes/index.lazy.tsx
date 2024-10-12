@@ -6,7 +6,7 @@ export const Route = createLazyFileRoute("/notes/")({
   component: Index,
 });
 
-function Index() {
+export function Index() {
   const { data: notes } = useNotesQuery();
 
   if (!notes) return;
