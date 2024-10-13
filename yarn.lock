@@ -698,6 +698,11 @@
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-8.57.1.tgz#de633db3ec2ef6a3c89e2f19038063e8a122e2c2"
   integrity sha512-d9zaMRSTIKDLhctzH12MtXvJKSSUhaHcjV+2Z+GK+EEY7XKpP5yR4x+N3TAcHTcu963nIr+TMcCb4DBCYX1z6Q==
 
+"@hookform/resolvers@^3.9.0":
+  version "3.9.0"
+  resolved "https://registry.yarnpkg.com/@hookform/resolvers/-/resolvers-3.9.0.tgz#cf540ac21c6c0cd24a40cf53d8e6d64391fb753d"
+  integrity sha512-bU0Gr4EepJ/EQsH/IwEzYLsT/PEj5C0ynLQ4m+GSHS+xKH4TfSelhluTgOaoc4kA5s7eCsQbM4wvZLzELmWzUg==
+
 "@humanwhocodes/config-array@^0.13.0":
   version "0.13.0"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.13.0.tgz#fb907624df3256d04b9aa2df50d7aa97ec648748"
@@ -826,6 +831,11 @@
   dependencies:
     "@babel/runtime" "^7.13.10"
 
+"@radix-ui/primitive@1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@radix-ui/primitive/-/primitive-1.1.0.tgz#42ef83b3b56dccad5d703ae8c42919a68798bbe2"
+  integrity sha512-4Z8dn6Upk0qk4P74xBhZ6Hd/w0mPEzOOLxy4xiPXOXqjF7jZS0VAKk7/x/H6FyY2zCkYJqePf1G5KmkmNJ4RBA==
+
 "@radix-ui/react-compose-refs@1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@radix-ui/react-compose-refs/-/react-compose-refs-1.0.0.tgz#37595b1f16ec7f228d698590e78eeed18ff218ae"
@@ -844,6 +854,11 @@
   integrity sha512-1pVM9RfOQ+n/N5PJK33kRSKsr1glNxomxONs5c49MliinBY6Yw2Q995qfBUUo0/Mbg05B/sGA0gkgPI7kmSHBg==
   dependencies:
     "@babel/runtime" "^7.13.10"
+
+"@radix-ui/react-context@1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@radix-ui/react-context/-/react-context-1.1.0.tgz#6df8d983546cfd1999c8512f3a8ad85a6e7fcee8"
+  integrity sha512-OKrckBy+sMEgYM/sMmqmErVn0kZqrHPJze+Ql3DzYsDDp0hl0L62nx/2122/Bvps1qz645jlcu2tD9lrRSdf8A==
 
 "@radix-ui/react-dialog@1.0.0":
   version "1.0.0"
@@ -895,6 +910,18 @@
     "@radix-ui/react-primitive" "1.0.0"
     "@radix-ui/react-use-callback-ref" "1.0.0"
 
+"@radix-ui/react-form@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@radix-ui/react-form/-/react-form-0.1.0.tgz#7111a6aa54a2bde0d11fb72643f9ffc871ac58ad"
+  integrity sha512-1/oVYPDjbFILOLIarcGcMKo+y6SbTVT/iUKVEw59CF4offwZgBgC3ZOeSBewjqU0vdA6FWTPWTN63obj55S/tQ==
+  dependencies:
+    "@radix-ui/primitive" "1.1.0"
+    "@radix-ui/react-compose-refs" "1.1.0"
+    "@radix-ui/react-context" "1.1.0"
+    "@radix-ui/react-id" "1.1.0"
+    "@radix-ui/react-label" "2.1.0"
+    "@radix-ui/react-primitive" "2.0.0"
+
 "@radix-ui/react-id@1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@radix-ui/react-id/-/react-id-1.0.0.tgz#8d43224910741870a45a8c9d092f25887bb6d11e"
@@ -902,6 +929,20 @@
   dependencies:
     "@babel/runtime" "^7.13.10"
     "@radix-ui/react-use-layout-effect" "1.0.0"
+
+"@radix-ui/react-id@1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@radix-ui/react-id/-/react-id-1.1.0.tgz#de47339656594ad722eb87f94a6b25f9cffae0ed"
+  integrity sha512-EJUrI8yYh7WOjNOqpoJaf1jlFIH2LvtgAl+YcFqNCa+4hj64ZXmPkAKOFs/ukjz3byN6bdb/AVUqHkI8/uWWMA==
+  dependencies:
+    "@radix-ui/react-use-layout-effect" "1.1.0"
+
+"@radix-ui/react-label@2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@radix-ui/react-label/-/react-label-2.1.0.tgz#3aa2418d70bb242be37c51ff5e51a2adcbc372e3"
+  integrity sha512-peLblDlFw/ngk3UWq0VnYaOLy6agTZZ+MUO/WhVfm14vJGML+xH4FAl2XQGLqdefjNb7ApRg6Yn7U42ZhmYXdw==
+  dependencies:
+    "@radix-ui/react-primitive" "2.0.0"
 
 "@radix-ui/react-portal@1.0.0":
   version "1.0.0"
@@ -928,6 +969,13 @@
     "@babel/runtime" "^7.13.10"
     "@radix-ui/react-slot" "1.0.0"
 
+"@radix-ui/react-primitive@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@radix-ui/react-primitive/-/react-primitive-2.0.0.tgz#fe05715faa9203a223ccc0be15dc44b9f9822884"
+  integrity sha512-ZSpFm0/uHa8zTvKBDjLFWLo8dkr4MBsiDLz0g3gMUwqgLHz9rTaRRGYDgvZPtBJgYCBKXkS9fzmoySgr8CO6Cw==
+  dependencies:
+    "@radix-ui/react-slot" "1.1.0"
+
 "@radix-ui/react-slot@1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@radix-ui/react-slot/-/react-slot-1.0.0.tgz#7fa805b99891dea1e862d8f8fbe07f4d6d0fd698"
@@ -936,7 +984,7 @@
     "@babel/runtime" "^7.13.10"
     "@radix-ui/react-compose-refs" "1.0.0"
 
-"@radix-ui/react-slot@^1.0.2":
+"@radix-ui/react-slot@1.1.0", "@radix-ui/react-slot@^1.0.2":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@radix-ui/react-slot/-/react-slot-1.1.0.tgz#7c5e48c36ef5496d97b08f1357bb26ed7c714b84"
   integrity sha512-FUCf5XMfmW4dtYl69pdS4DbxKy8nj4M7SafBgPllysxmdachynNflAdp/gCsnYWNDnge6tI9onzMp5ARYc1KNw==
@@ -972,6 +1020,11 @@
   integrity sha512-6Tpkq+R6LOlmQb1R5NNETLG0B4YP0wc+klfXafpUCj6JGyaUc8il7/kUZ7m59rGbXGczE9Bs+iz2qloqsZBduQ==
   dependencies:
     "@babel/runtime" "^7.13.10"
+
+"@radix-ui/react-use-layout-effect@1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@radix-ui/react-use-layout-effect/-/react-use-layout-effect-1.1.0.tgz#3c2c8ce04827b26a39e442ff4888d9212268bd27"
+  integrity sha512-+FPE0rOdziWSrH9athwI1R0HDVbWlEhd+FR+aSDk4uWGmSJ9Z54sdZVDQPZAinJhJXwfT+qnj969mCsT2gfm5w==
 
 "@remirror/core-constants@3.0.0":
   version "3.0.0"
@@ -5732,6 +5785,11 @@ react-element-to-jsx-string@^15.0.0:
     is-plain-object "5.0.0"
     react-is "18.1.0"
 
+react-hook-form@^7.53.0:
+  version "7.53.0"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.53.0.tgz#3cf70951bf41fa95207b34486203ebefbd3a05ab"
+  integrity sha512-M1n3HhqCww6S2hxLxciEXy2oISPnAzxY7gvwVPrtlczTM/1dDadXgUxDpHMrMTblDOcm/AXtXxHwZ3jpg1mqKQ==
+
 react-is@18.1.0:
   version "18.1.0"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-18.1.0.tgz#61aaed3096d30eacf2a2127118b5b41387d32a67"
@@ -6429,6 +6487,11 @@ synckit@^0.9.1:
   dependencies:
     "@pkgr/core" "^0.1.0"
     tslib "^2.6.2"
+
+tailwind-merge@^2.5.3:
+  version "2.5.3"
+  resolved "https://registry.yarnpkg.com/tailwind-merge/-/tailwind-merge-2.5.3.tgz#579546e14ddda24462e0303acd8798c50f5511bb"
+  integrity sha512-d9ZolCAIzom1nf/5p4LdD5zvjmgSxY0BGgdSvmXIoMYAiPdAW/dSpP7joCDYFY7r/HkEa2qmPtkgsu0xjQeQtw==
 
 tailwindcss@^3.4.13:
   version "3.4.13"
