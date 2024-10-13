@@ -1,6 +1,6 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import { Index } from "./notes/index.lazy";
+import { Login } from "./auth/login.lazy";
 
 export const Route = createLazyFileRoute("/")({
-  component: Index,
+  component: Login,
 });
