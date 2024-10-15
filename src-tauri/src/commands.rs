@@ -1,19 +1,23 @@
-use std::sync::Mutex;
+use tauri::{Manager, State};
 
-use tauri::State;
-
-use crate::{note::Note, AppState};
+use crate::{note::Note, service::Service, AppState};
 
 #[tauri::command]
-pub fn notes_index(state: State<'_, Mutex<AppState>>) -> Vec<Note> {
-    let state = state.lock().expect("could not lock state");
+pub async fn notes_index(app_handle: tauri::AppHandle) -> Result<Vec<Note>, String> {
+    let state: State<'_, AppState> = app_handle.state();
 
-    state.notes_manager().get_notes()
+    match state.notes_manager().index().await {
+        Ok(notes) => Ok(notes),
+        Err(_) => Err("failed to list notes".to_string()),
+    }
 }
 
 #[tauri::command]
-pub fn notes_show(state: State<'_, Mutex<AppState>>, id: u32) -> Option<Note> {
-    let state = state.lock().expect("could not lock state");
+pub async fn notes_show(app_handle: tauri::AppHandle, id: u32) -> Result<Note, String> {
+    let state: State<'_, AppState> = app_handle.state();
 
-    state.notes_manager().get_note(id)
+    match state.notes_manager().show(id).await {
+        Ok(note) => Ok(note),
+        Err(_) => Err("note not found".to_string()),
+    }
 }

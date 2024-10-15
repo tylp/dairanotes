@@ -1,14 +1,23 @@
 use anyhow::Result;
+use async_trait::async_trait;
 use serde::de::DeserializeOwned;
 use tauri_plugin_http::reqwest;
 
+#[async_trait]
+pub trait HttpClient: Send + Sync {
+    async fn get<T: DeserializeOwned>(&self, slug: &str) -> Result<T>;
+    async fn patch(&self, slug: &str, params: Vec<(&str, &str)>) -> Result<()>;
+    async fn post(&self, slug: &str, params: Vec<(&str, &str)>) -> Result<()>;
+    async fn delete(&self, slug: &str) -> Result<()>;
+}
+
 #[derive(Debug)]
-pub struct HttpClient {
+pub struct HttpClientImpl {
     client: reqwest::Client,
     root: String,
 }
 
-impl Default for HttpClient {
+impl Default for HttpClientImpl {
     fn default() -> Self {
         Self {
             client: reqwest::Client::new(),
@@ -17,15 +26,9 @@ impl Default for HttpClient {
     }
 }
 
-impl HttpClient {
-    pub fn new(root: String) -> Self {
-        Self {
-            client: reqwest::Client::new(),
-            root,
-        }
-    }
-
-    pub async fn get<T: DeserializeOwned>(&self, slug: &str) -> Result<T> {
+#[async_trait]
+impl HttpClient for HttpClientImpl {
+    async fn get<T: DeserializeOwned>(&self, slug: &str) -> Result<T> {
         let url = format!("{}/{}", self.root, slug);
         let response = self.client.get(url).send().await?;
 
@@ -35,7 +38,7 @@ impl HttpClient {
         }
     }
 
-    pub async fn patch(&self, slug: &str, params: Vec<(&str, &str)>) -> Result<()> {
+    async fn patch(&self, slug: &str, params: Vec<(&str, &str)>) -> Result<()> {
         let url = format!("{}/{}", self.root, slug);
         let response = self.client.patch(url).json(&params).send().await?;
 
@@ -45,7 +48,7 @@ impl HttpClient {
         }
     }
 
-    pub async fn post(&self, slug: &str, params: Vec<(&str, &str)>) -> Result<()> {
+    async fn post(&self, slug: &str, params: Vec<(&str, &str)>) -> Result<()> {
         let url = format!("{}/{}", self.root, slug);
         let response = self.client.post(url).json(&params).send().await?;
 
@@ -55,7 +58,7 @@ impl HttpClient {
         }
     }
 
-    pub async fn delete(&self, slug: &str) -> Result<()> {
+    async fn delete(&self, slug: &str) -> Result<()> {
         let url = format!("{}/{}", self.root, slug);
         let response = self.client.delete(url).send().await?;
 
