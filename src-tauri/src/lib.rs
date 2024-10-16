@@ -1,13 +1,16 @@
-use std::sync::Mutex;
-
+use http::HttpClientImpl;
 use note::NoteManager;
 use tauri::{Builder, Manager};
+use tauri_plugin_store::StoreExt;
 
-mod api;
 mod commands;
+mod http;
 mod note;
+mod service;
 
-#[derive(Debug, Default)]
+use note::note_service::LocalNoteService;
+use note::note_service::RemoteNoteService;
+
 struct AppState {
     notes_manager: NoteManager,
 }
@@ -21,11 +24,24 @@ impl AppState {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     Builder::default()
+        .plugin(tauri_plugin_shell::init())
+        .plugin(tauri_plugin_store::Builder::default().build())
         .setup(|app| {
-            app.manage(Mutex::new(AppState::default()));
+            let notes_store = app.handle().store_builder("notes.bin").build();
+
+            let local_note_service = LocalNoteService::new(notes_store);
+            let _remote_note_service =
+                RemoteNoteService::new("/notes".to_string(), HttpClientImpl::default());
+
+            let note_manager = NoteManager::new(Box::new(local_note_service));
+
+            let state = AppState {
+                notes_manager: note_manager,
+            };
+
+            app.manage(state);
             Ok(())
         })
-        .plugin(tauri_plugin_shell::init())
         .invoke_handler(tauri::generate_handler![
             commands::notes_index,
             commands::notes_show,
