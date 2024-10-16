@@ -4,13 +4,30 @@ import {
   UseRegisterQueryParamsSchema,
 } from "@/features/authentication/api/use-register-query";
 import { RegisterForm } from "@/features/authentication/components/register-form";
-import { useAuthStore } from "@/features/authentication/stores/use-auth";
+import { useAuthStore } from "@/features/authentication/stores/use-auth-store";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createLazyFileRoute, Link } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Link,
+  redirect,
+  useNavigate,
+} from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 
-export const Route = createLazyFileRoute("/auth/register")({
+export const Route = createFileRoute("/auth/register")({
   component: Register,
+  beforeLoad: () => {
+    const { isAuthenticated } = useAuthStore.getState();
+
+    if (isAuthenticated()) {
+      throw redirect({
+        to: "/notes",
+        search: {
+          redirect: location.href,
+        },
+      });
+    }
+  },
 });
 
 function Register() {
@@ -18,14 +35,23 @@ function Register() {
     resolver: zodResolver(UseRegisterQueryParamsSchema),
   });
 
+  const navigate = useNavigate();
+
   const { login } = useAuthStore();
 
   const { mutateAsync: register } = useRegisterQuery();
 
   const onSubmit = async (data: UseRegisterQueryParams) => {
-    const user = await register(data);
+    const registeredUser = await register(data);
 
-    login(user);
+    form.reset();
+    login(registeredUser);
+    navigate({
+      to: "/notes",
+      search: {
+        redirect: location.href,
+      },
+    });
   };
 
   return (
