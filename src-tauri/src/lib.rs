@@ -1,4 +1,3 @@
-use async_trait::async_trait;
 use http::HttpClientImpl;
 use tauri::{Builder, Manager};
 use tauri_plugin_store::StoreExt;
@@ -18,7 +17,7 @@ use user::UserManager;
 
 struct AppState {
     notes_manager: NoteManager,
-    user_manager: UserManager,
+    users_manager: UserManager,
 }
 
 impl AppState {
@@ -26,8 +25,8 @@ impl AppState {
         &self.notes_manager
     }
 
-    pub fn user_manager(&self) -> &UserManager {
-        &self.user_manager
+    pub fn users_manager(&self) -> &UserManager {
+        &self.users_manager
     }
 }
 
@@ -47,22 +46,22 @@ pub fn run() {
             let _remote_user_service =
                 RemoteUserService::new("/users".to_string(), HttpClientImpl::default());
 
-            let note_manager = NoteManager::new(Box::new(local_note_service));
-            let user_manager = UserManager::new(Box::new(local_user_service));
+            let notes_manager = NoteManager::new(Box::new(local_note_service));
+            let users_manager = UserManager::new(Box::new(local_user_service));
 
             let state = AppState {
-                notes_manager: note_manager,
-                user_manager,
+                notes_manager,
+                users_manager,
             };
 
             app.manage(state);
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
-            commands::notes_index,
-            commands::notes_show,
-            commands::user_index,
-            commands::user_show
+            commands::notes_commands::notes_index,
+            commands::notes_commands::notes_show,
+            commands::users_commands::users_index,
+            commands::users_commands::users_show
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -66,7 +66,7 @@ impl Service<User> for LocalUserService {
 
 #[derive(Debug)]
 pub struct RemoteUserService {
-    client: HttpClientImpl, // TODO: use HttpClient trait
+    client: HttpClientImpl,
     slug: String,
 }
 
