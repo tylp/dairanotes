@@ -1,6 +1,7 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { invoke } from "@tauri-apps/api/core";
 import z from "zod";
+import { User } from "@/types/user";
+import { useMutation } from "@tanstack/react-query";
+import { invoke } from "@tauri-apps/api/core";
 
 export const UseRegisterQueryParamsSchema = z
   .object({
@@ -17,7 +18,7 @@ export type UseRegisterQueryParams = z.infer<
   typeof UseRegisterQueryParamsSchema
 >;
 
-export type UseRegisterQueryReturn = void;
+export type UseRegisterQueryReturn = User;
 
 const mutationFn = (
   params: UseRegisterQueryParams,

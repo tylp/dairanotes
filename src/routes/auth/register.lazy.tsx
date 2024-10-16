@@ -4,6 +4,7 @@ import {
   UseRegisterQueryParamsSchema,
 } from "@/features/authentication/api/use-register-query";
 import { RegisterForm } from "@/features/authentication/components/register-form";
+import { useAuthStore } from "@/features/authentication/stores/use-auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createLazyFileRoute, Link } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
@@ -17,12 +18,14 @@ function Register() {
     resolver: zodResolver(UseRegisterQueryParamsSchema),
   });
 
+  const { login } = useAuthStore();
+
   const { mutateAsync: register } = useRegisterQuery();
 
   const onSubmit = async (data: UseRegisterQueryParams) => {
     const user = await register(data);
 
-    console.log(user);
+    login(user);
   };
 
   return (
