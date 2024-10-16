@@ -1,8 +1,7 @@
-import { createServer, Model, Registry } from "miragejs";
+import { createServer, Model } from "miragejs";
 import { createTauriResponse } from "./utils/create-tauri-route";
 import { Environment } from "@/types/environment";
 import { seeds, serializers } from "./configs";
-import Schema from "miragejs/orm/schema";
 
 type MakeServerParams = {
   environment?: Environment;
@@ -26,8 +25,10 @@ export function makeServer({
         return createTauriResponse(schema.notes.all());
       });
 
-      this.post("/notes_show", (schema) => {
-        return createTauriResponse(schema.notes.findBy({ id: 1 }));
+      this.post("/notes_show", (schema, request) => {
+        const { id } = JSON.parse(request.requestBody);
+
+        return createTauriResponse(schema.notes.findBy({ id }));
       });
     },
 

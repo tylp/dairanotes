@@ -1,6 +1,6 @@
 import { cva } from "class-variance-authority";
 
-export const noteStyles = cva("", {
+export const paperStyles = cva("", {
   variants: {
     color: {
       red: "bg-[#fca590]",

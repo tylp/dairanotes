@@ -11,6 +11,7 @@ import jsxA11y from "eslint-plugin-jsx-a11y";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
 import reactPlugin from "eslint-plugin-react";
 import tailwind from "eslint-plugin-tailwindcss";
+import pluginRouter from "@tanstack/eslint-plugin-router";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -36,6 +37,7 @@ export default [
   reactPlugin.configs.flat.recommended,
   reactPlugin.configs.flat["jsx-runtime"],
   ...tailwind.configs["flat/recommended"],
+  ...pluginRouter.configs["flat/recommended"],
   {
     settings: {
       react: {
