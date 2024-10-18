@@ -1,14 +1,21 @@
-use anyhow::Result;
-use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
-use user_service::UserService;
-
-use crate::service::Service;
-
-pub mod user_service;
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 pub struct User {
     id: u32,
     username: String,
+}
+
+impl User {
+    pub fn new(id: u32, username: String) -> Self {
+        Self { id, username }
+    }
+
+    pub fn id(&self) -> u32 {
+        self.id
+    }
+
+    pub fn username(&self) -> &str {
+        &self.username
+    }
 }

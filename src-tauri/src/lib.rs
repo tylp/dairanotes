@@ -2,21 +2,18 @@ use std::sync::Arc;
 
 use async_trait::async_trait;
 use http::HttpClientImpl;
-use note::note_service::NoteService;
+use services::{
+    note_service::{LocalNoteService, NoteService, RemoteNoteService},
+    user_service::{LocalUserService, RemoteUserService, UserService},
+};
 use tauri::{Builder, Manager};
 use tauri_plugin_store::StoreExt;
 
 mod commands;
 mod http;
 mod note;
-mod service;
+mod services;
 mod user;
-
-use note::note_service::LocalNoteService;
-use note::note_service::RemoteNoteService;
-use user::user_service::LocalUserService;
-use user::user_service::RemoteUserService;
-use user::user_service::UserService;
 
 #[async_trait]
 trait AppService: Send + Sync {
