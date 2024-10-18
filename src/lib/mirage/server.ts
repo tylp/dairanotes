@@ -16,6 +16,7 @@ export function makeServer({
 
     models: {
       note: Model,
+      user: Model,
     },
 
     seeds,
@@ -29,6 +30,12 @@ export function makeServer({
         const { id } = JSON.parse(request.requestBody);
 
         return createTauriResponse(schema.notes.findBy({ id }));
+      });
+
+      this.post("/register", (schema, request) => {
+        const newUser = JSON.parse(request.requestBody);
+
+        return createTauriResponse(schema.users.create(newUser).attrs);
       });
     },
 

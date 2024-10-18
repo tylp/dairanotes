@@ -13,6 +13,7 @@ import { createFileRoute } from "@tanstack/react-router"
 // Import Routes
 
 import { Route as rootRoute } from "./routes/__root"
+import { Route as AuthRegisterImport } from "./routes/auth/register"
 
 // Create Virtual Routes
 
@@ -20,7 +21,6 @@ const IndexLazyImport = createFileRoute("/")()
 const NotesIndexLazyImport = createFileRoute("/notes/")()
 const NotesCreateLazyImport = createFileRoute("/notes/create")()
 const NotesIdLazyImport = createFileRoute("/notes/$id")()
-const AuthRegisterLazyImport = createFileRoute("/auth/register")()
 const AuthLoginLazyImport = createFileRoute("/auth/login")()
 const NotesIdEditLazyImport = createFileRoute("/notes//$id/edit")()
 
@@ -46,15 +46,15 @@ const NotesIdLazyRoute = NotesIdLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import("./routes/notes/$id.lazy").then((d) => d.Route))
 
-const AuthRegisterLazyRoute = AuthRegisterLazyImport.update({
-  path: "/auth/register",
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import("./routes/auth/register.lazy").then((d) => d.Route))
-
 const AuthLoginLazyRoute = AuthLoginLazyImport.update({
   path: "/auth/login",
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import("./routes/auth/login.lazy").then((d) => d.Route))
+
+const AuthRegisterRoute = AuthRegisterImport.update({
+  path: "/auth/register",
+  getParentRoute: () => rootRoute,
+} as any)
 
 const NotesIdEditLazyRoute = NotesIdEditLazyImport.update({
   path: "/notes/$id/edit",
@@ -74,18 +74,18 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
+    "/auth/register": {
+      id: "/auth/register"
+      path: "/auth/register"
+      fullPath: "/auth/register"
+      preLoaderRoute: typeof AuthRegisterImport
+      parentRoute: typeof rootRoute
+    }
     "/auth/login": {
       id: "/auth/login"
       path: "/auth/login"
       fullPath: "/auth/login"
       preLoaderRoute: typeof AuthLoginLazyImport
-      parentRoute: typeof rootRoute
-    }
-    "/auth/register": {
-      id: "/auth/register"
-      path: "/auth/register"
-      fullPath: "/auth/register"
-      preLoaderRoute: typeof AuthRegisterLazyImport
       parentRoute: typeof rootRoute
     }
     "/notes/$id": {
@@ -123,8 +123,8 @@ declare module "@tanstack/react-router" {
 
 export interface FileRoutesByFullPath {
   "/": typeof IndexLazyRoute
+  "/auth/register": typeof AuthRegisterRoute
   "/auth/login": typeof AuthLoginLazyRoute
-  "/auth/register": typeof AuthRegisterLazyRoute
   "/notes/$id": typeof NotesIdLazyRoute
   "/notes/create": typeof NotesCreateLazyRoute
   "/notes": typeof NotesIndexLazyRoute
@@ -133,8 +133,8 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   "/": typeof IndexLazyRoute
+  "/auth/register": typeof AuthRegisterRoute
   "/auth/login": typeof AuthLoginLazyRoute
-  "/auth/register": typeof AuthRegisterLazyRoute
   "/notes/$id": typeof NotesIdLazyRoute
   "/notes/create": typeof NotesCreateLazyRoute
   "/notes": typeof NotesIndexLazyRoute
@@ -144,8 +144,8 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   "/": typeof IndexLazyRoute
+  "/auth/register": typeof AuthRegisterRoute
   "/auth/login": typeof AuthLoginLazyRoute
-  "/auth/register": typeof AuthRegisterLazyRoute
   "/notes/$id": typeof NotesIdLazyRoute
   "/notes/create": typeof NotesCreateLazyRoute
   "/notes/": typeof NotesIndexLazyRoute
@@ -156,8 +156,8 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | "/"
-    | "/auth/login"
     | "/auth/register"
+    | "/auth/login"
     | "/notes/$id"
     | "/notes/create"
     | "/notes"
@@ -165,8 +165,8 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | "/"
-    | "/auth/login"
     | "/auth/register"
+    | "/auth/login"
     | "/notes/$id"
     | "/notes/create"
     | "/notes"
@@ -174,8 +174,8 @@ export interface FileRouteTypes {
   id:
     | "__root__"
     | "/"
-    | "/auth/login"
     | "/auth/register"
+    | "/auth/login"
     | "/notes/$id"
     | "/notes/create"
     | "/notes/"
@@ -185,8 +185,8 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
+  AuthRegisterRoute: typeof AuthRegisterRoute
   AuthLoginLazyRoute: typeof AuthLoginLazyRoute
-  AuthRegisterLazyRoute: typeof AuthRegisterLazyRoute
   NotesIdLazyRoute: typeof NotesIdLazyRoute
   NotesCreateLazyRoute: typeof NotesCreateLazyRoute
   NotesIndexLazyRoute: typeof NotesIndexLazyRoute
@@ -195,8 +195,8 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
+  AuthRegisterRoute: AuthRegisterRoute,
   AuthLoginLazyRoute: AuthLoginLazyRoute,
-  AuthRegisterLazyRoute: AuthRegisterLazyRoute,
   NotesIdLazyRoute: NotesIdLazyRoute,
   NotesCreateLazyRoute: NotesCreateLazyRoute,
   NotesIndexLazyRoute: NotesIndexLazyRoute,
@@ -216,8 +216,8 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/auth/login",
         "/auth/register",
+        "/auth/login",
         "/notes/$id",
         "/notes/create",
         "/notes/",
@@ -227,11 +227,11 @@ export const routeTree = rootRoute
     "/": {
       "filePath": "index.lazy.tsx"
     },
+    "/auth/register": {
+      "filePath": "auth/register.tsx"
+    },
     "/auth/login": {
       "filePath": "auth/login.lazy.tsx"
-    },
-    "/auth/register": {
-      "filePath": "auth/register.lazy.tsx"
     },
     "/notes/$id": {
       "filePath": "notes/$id.lazy.tsx"
