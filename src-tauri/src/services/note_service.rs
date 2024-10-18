@@ -1,13 +1,13 @@
 use crate::{
     http::{HttpClient, HttpClientImpl},
-    service::Service,
+    note::Note,
 };
 use anyhow::{anyhow, Result};
 use async_trait::async_trait;
 use tauri::Wry;
 use tauri_plugin_store::Store;
 
-use super::Note;
+use super::Service;
 
 pub type NoteService = dyn Service<Note>;
 
@@ -43,14 +43,14 @@ impl Service<Note> for LocalNoteService {
 
     async fn store(&self, param: Note) -> Result<()> {
         self.store
-            .set(param.id.to_string(), serde_json::to_string(&param)?);
+            .set(param.id().to_string(), serde_json::to_string(&param)?);
 
         Ok(())
     }
 
     async fn update(&self, param: Note) -> Result<()> {
         self.store
-            .set(param.id.to_string(), serde_json::to_string(&param)?);
+            .set(param.id().to_string(), serde_json::to_string(&param)?);
 
         Ok(())
     }

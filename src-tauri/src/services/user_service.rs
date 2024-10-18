@@ -5,10 +5,10 @@ use tauri_plugin_store::Store;
 
 use crate::{
     http::{HttpClient, HttpClientImpl},
-    service::Service,
+    user::User,
 };
 
-use super::User;
+use super::Service;
 
 pub type UserService = dyn Service<User>;
 
@@ -44,14 +44,14 @@ impl Service<User> for LocalUserService {
 
     async fn store(&self, param: User) -> Result<()> {
         self.store
-            .set(param.id.to_string(), serde_json::to_string(&param)?);
+            .set(param.id().to_string(), serde_json::to_string(&param)?);
 
         Ok(())
     }
 
     async fn update(&self, param: User) -> Result<()> {
         self.store
-            .set(param.id.to_string(), serde_json::to_string(&param)?);
+            .set(param.id().to_string(), serde_json::to_string(&param)?);
 
         Ok(())
     }
