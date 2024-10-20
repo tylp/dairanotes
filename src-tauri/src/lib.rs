@@ -9,9 +9,8 @@ use tauri_plugin_store::StoreExt;
 
 mod commands;
 mod http;
-mod note;
+mod models;
 mod services;
-mod user;
 
 #[async_trait]
 trait State: Send + Sync {

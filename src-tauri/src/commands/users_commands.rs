@@ -1,6 +1,6 @@
 use tauri::{Manager, State};
 
-use crate::{user::User, AppState};
+use crate::{models::user::User, AppState};
 
 #[tauri::command]
 pub async fn users_index(app_handle: tauri::AppHandle) -> Result<Vec<User>, String> {

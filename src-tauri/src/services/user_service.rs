@@ -5,7 +5,7 @@ use tauri_plugin_store::Store;
 
 use crate::{
     http::{HttpClient, HttpClientImpl},
-    user::User,
+    models::user::User,
 };
 
 use super::Service;

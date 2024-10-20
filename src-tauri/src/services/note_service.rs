@@ -1,6 +1,6 @@
 use crate::{
     http::{HttpClient, HttpClientImpl},
-    note::Note,
+    models::note::Note,
 };
 use anyhow::{anyhow, Result};
 use async_trait::async_trait;

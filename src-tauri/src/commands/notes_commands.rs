@@ -1,6 +1,6 @@
 use tauri::{Manager, State};
 
-use crate::{note::Note, AppState};
+use crate::{models::note::Note, AppState};
 
 #[tauri::command]
 pub async fn notes_index(app_handle: tauri::AppHandle) -> Result<Vec<Note>, String> {
