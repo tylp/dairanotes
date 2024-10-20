@@ -1,6 +1,9 @@
 use anyhow::Result;
 use async_trait::async_trait;
 
+pub mod note_service;
+pub mod user_service;
+
 #[async_trait]
 pub trait Service<T>: Send + Sync {
     async fn index(&self) -> Result<Vec<T>>;
