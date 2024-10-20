@@ -1,5 +1,3 @@
-use std::sync::Arc;
-
 use async_trait::async_trait;
 use http::HttpClientImpl;
 use services::{
@@ -16,17 +14,17 @@ mod services;
 mod user;
 
 #[async_trait]
-trait AppService: Send + Sync {
+trait State: Send + Sync {
     fn note_service(&self) -> &NoteService;
     fn user_service(&self) -> &UserService;
 }
 
-struct LocalService {
+struct LocalState {
     note_service: LocalNoteService,
     user_service: LocalUserService,
 }
 
-impl LocalService {
+impl LocalState {
     fn new(app: &mut App) -> Self {
         let notes_store = app.handle().store_builder("notes.bin").build();
         let note_service = LocalNoteService::new(notes_store);
@@ -42,7 +40,7 @@ impl LocalService {
 }
 
 #[async_trait]
-impl AppService for LocalService {
+impl State for LocalState {
     fn note_service(&self) -> &NoteService {
         &self.note_service
     }
@@ -52,12 +50,12 @@ impl AppService for LocalService {
     }
 }
 
-struct RemoteService {
+struct RemoteState {
     note_service: RemoteNoteService,
     user_service: RemoteUserService,
 }
 
-impl RemoteService {
+impl RemoteState {
     fn new() -> Self {
         let remote_note_service =
             RemoteNoteService::new("/notes".to_string(), HttpClientImpl::default());
@@ -73,7 +71,7 @@ impl RemoteService {
 }
 
 #[async_trait]
-impl AppService for RemoteService {
+impl State for RemoteState {
     fn note_service(&self) -> &NoteService {
         &self.note_service
     }
@@ -93,35 +91,34 @@ trait NetworkListener {
 }
 
 struct AppState {
-    current_service: Arc<dyn AppService>,
-    local_service: Arc<LocalService>,
-    remote_service: Arc<RemoteService>,
+    network_mode: NetworkMode,
+    local_service: LocalState,
+    remote_service: RemoteState,
 }
 
 impl AppState {
-    fn new(local: LocalService, remote: RemoteService) -> Self {
-        let local_state = Arc::new(local);
-        let remote_state = Arc::new(remote);
-        let current_state = Arc::clone(&local_state);
+    fn new(local: LocalState, remote: RemoteState) -> Self {
+        let local_state = local;
+        let remote_state = remote;
 
         Self {
-            current_service: current_state,
+            network_mode: NetworkMode::Local,
             local_service: local_state,
             remote_service: remote_state,
         }
     }
 
-    fn current_state(&self) -> &dyn AppService {
-        &*self.current_service
+    fn current_state(&self) -> &dyn State {
+        match self.network_mode {
+            NetworkMode::Local => &self.local_service,
+            NetworkMode::Remote => &self.remote_service,
+        }
     }
 }
 
 impl NetworkListener for AppState {
     fn notify(&mut self, mode: NetworkMode) {
-        self.current_service = match mode {
-            NetworkMode::Local => self.local_service.clone(),
-            NetworkMode::Remote => self.remote_service.clone(),
-        }
+        self.network_mode = mode;
     }
 }
 
@@ -131,10 +128,10 @@ pub fn run() {
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_store::Builder::default().build())
         .setup(|app| {
-            let local_service = LocalService::new(app);
-            let remote_service = RemoteService::new();
+            let local_state = LocalState::new(app);
+            let remote_state = RemoteState::new();
 
-            let state = AppState::new(local_service, remote_service);
+            let state = AppState::new(local_state, remote_state);
 
             app.manage(state);
             Ok(())
