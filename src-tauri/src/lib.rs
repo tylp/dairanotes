@@ -1,16 +1,16 @@
 use async_trait::async_trait;
-use http::HttpClientImpl;
 use services::{
     note_service::{LocalNoteService, NoteService, RemoteNoteService},
     user_service::{LocalUserService, RemoteUserService, UserService},
 };
 use tauri::{App, Builder, Manager};
 use tauri_plugin_store::StoreExt;
+use utils::http::HttpClientImpl;
 
 mod commands;
-mod http;
 mod models;
 mod services;
+mod utils;
 
 #[async_trait]
 trait State: Send + Sync {

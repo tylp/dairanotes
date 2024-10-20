@@ -4,8 +4,8 @@ use tauri::Wry;
 use tauri_plugin_store::Store;
 
 use crate::{
-    http::{HttpClient, HttpClientImpl},
     models::user::User,
+    utils::http::{HttpClient, HttpClientImpl},
 };
 
 use super::Service;
