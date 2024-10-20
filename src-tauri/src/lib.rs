@@ -6,7 +6,7 @@ use services::{
     note_service::{LocalNoteService, NoteService, RemoteNoteService},
     user_service::{LocalUserService, RemoteUserService, UserService},
 };
-use tauri::{Builder, Manager};
+use tauri::{App, Builder, Manager};
 use tauri_plugin_store::StoreExt;
 
 mod commands;
@@ -26,6 +26,21 @@ struct LocalService {
     user_service: LocalUserService,
 }
 
+impl LocalService {
+    fn new(app: &mut App) -> Self {
+        let notes_store = app.handle().store_builder("notes.bin").build();
+        let note_service = LocalNoteService::new(notes_store);
+
+        let user_store = app.handle().store_builder("users.bin").build();
+        let user_service = LocalUserService::new(user_store);
+
+        Self {
+            note_service,
+            user_service,
+        }
+    }
+}
+
 #[async_trait]
 impl AppService for LocalService {
     fn note_service(&self) -> &NoteService {
@@ -40,6 +55,21 @@ impl AppService for LocalService {
 struct RemoteService {
     note_service: RemoteNoteService,
     user_service: RemoteUserService,
+}
+
+impl RemoteService {
+    fn new() -> Self {
+        let remote_note_service =
+            RemoteNoteService::new("/notes".to_string(), HttpClientImpl::default());
+
+        let remote_user_service =
+            RemoteUserService::new("/users".to_string(), HttpClientImpl::default());
+
+        Self {
+            note_service: remote_note_service,
+            user_service: remote_user_service,
+        }
+    }
 }
 
 #[async_trait]
@@ -101,27 +131,10 @@ pub fn run() {
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_store::Builder::default().build())
         .setup(|app| {
-            let notes_store = app.handle().store_builder("notes.bin").build();
-            let local_note_service = LocalNoteService::new(notes_store);
-            let remote_note_service =
-                RemoteNoteService::new("/notes".to_string(), HttpClientImpl::default());
+            let local_service = LocalService::new(app);
+            let remote_service = RemoteService::new();
 
-            let user_store = app.handle().store_builder("users.bin").build();
-            let local_user_service = LocalUserService::new(user_store);
-            let remote_user_service =
-                RemoteUserService::new("/users".to_string(), HttpClientImpl::default());
-
-            let local_state = LocalService {
-                note_service: local_note_service,
-                user_service: local_user_service,
-            };
-
-            let remote_state = RemoteService {
-                note_service: remote_note_service,
-                user_service: remote_user_service,
-            };
-
-            let state = AppState::new(local_state, remote_state);
+            let state = AppState::new(local_service, remote_service);
 
             app.manage(state);
             Ok(())
