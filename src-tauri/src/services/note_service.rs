@@ -65,13 +65,16 @@ impl Service<Note> for LocalNoteService {
 
 #[derive(Debug)]
 pub struct RemoteNoteService {
-    client: HttpClientImpl, // TODO: use HttpClient trait
+    client: HttpClientImpl,
     slug: String,
 }
 
 impl RemoteNoteService {
-    pub fn new(slug: String, client: HttpClientImpl) -> Self {
-        Self { client, slug }
+    pub fn new(client: HttpClientImpl) -> Self {
+        Self {
+            client,
+            slug: "/notes".to_string(),
+        }
     }
 }
 

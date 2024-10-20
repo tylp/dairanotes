@@ -56,11 +56,8 @@ struct RemoteState {
 
 impl RemoteState {
     fn new() -> Self {
-        let remote_note_service =
-            RemoteNoteService::new("/notes".to_string(), HttpClientImpl::default());
-
-        let remote_user_service =
-            RemoteUserService::new("/users".to_string(), HttpClientImpl::default());
+        let remote_note_service = RemoteNoteService::new(HttpClientImpl::default());
+        let remote_user_service = RemoteUserService::new(HttpClientImpl::default());
 
         Self {
             note_service: remote_note_service,
