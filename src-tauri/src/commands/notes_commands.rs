@@ -6,7 +6,7 @@ use crate::{models::note::Note, AppState};
 pub async fn notes_index(app_handle: tauri::AppHandle) -> Result<Vec<Note>, String> {
     let state: State<'_, AppState> = app_handle.state();
 
-    match state.services().note_service().index().await {
+    match state.service().note_service().index().await {
         Ok(notes) => Ok(notes),
         Err(_) => Err("failed to list notes".to_string()),
     }
@@ -16,7 +16,7 @@ pub async fn notes_index(app_handle: tauri::AppHandle) -> Result<Vec<Note>, Stri
 pub async fn notes_show(app_handle: tauri::AppHandle, id: u32) -> Result<Note, String> {
     let state: State<'_, AppState> = app_handle.state();
 
-    match state.services().note_service().show(id).await {
+    match state.service().note_service().show(id).await {
         Ok(note) => Ok(note),
         Err(_) => Err("note not found".to_string()),
     }

@@ -107,7 +107,7 @@ impl AppState {
         }
     }
 
-    fn services(&self) -> &dyn State {
+    fn service(&self) -> &dyn State {
         match self.network_mode {
             NetworkMode::Local => &self.local_service,
             NetworkMode::Remote => &self.remote_service,
