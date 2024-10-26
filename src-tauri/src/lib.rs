@@ -1,7 +1,6 @@
 use std::sync::Arc;
 
 use async_trait::async_trait;
-use config::Configuration;
 use services::{
     network_service::{NetworkListener, NetworkMode, NetworkMonitor},
     note_service::{LocalNoteService, NoteService, RemoteNoteService},
