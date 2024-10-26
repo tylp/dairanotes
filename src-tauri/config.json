@@ -1,0 +1,6 @@
+{
+    "network": {
+        "server": "http://127.0.0.1:9999",
+        "health_check_interval": 5000
+    }
+}
