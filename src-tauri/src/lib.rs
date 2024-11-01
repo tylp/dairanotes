@@ -1,13 +1,18 @@
+use std::sync::Arc;
+
 use async_trait::async_trait;
 use services::{
+    network_service::{NetworkListener, NetworkMode, NetworkMonitor},
     note_service::{LocalNoteService, NoteService, RemoteNoteService},
     user_service::{LocalUserService, RemoteUserService, UserService},
 };
+use tauri::async_runtime::Mutex;
 use tauri::{App, Builder, Manager};
 use tauri_plugin_store::StoreExt;
 use utils::http::HttpClientImpl;
 
 mod commands;
+mod config;
 mod models;
 mod services;
 mod utils;
@@ -56,11 +61,8 @@ struct RemoteState {
 
 impl RemoteState {
     fn new() -> Self {
-        let remote_note_service =
-            RemoteNoteService::new("/notes".to_string(), HttpClientImpl::default());
-
-        let remote_user_service =
-            RemoteUserService::new("/users".to_string(), HttpClientImpl::default());
+        let remote_note_service = RemoteNoteService::new(HttpClientImpl::default());
+        let remote_user_service = RemoteUserService::new(HttpClientImpl::default());
 
         Self {
             note_service: remote_note_service,
@@ -78,15 +80,6 @@ impl State for RemoteState {
     fn user_service(&self) -> &UserService {
         &self.user_service
     }
-}
-
-enum NetworkMode {
-    Local,
-    Remote,
-}
-
-trait NetworkListener {
-    fn notify(&mut self, mode: NetworkMode);
 }
 
 struct AppState {
@@ -117,6 +110,7 @@ impl AppState {
 
 impl NetworkListener for AppState {
     fn notify(&mut self, mode: NetworkMode) {
+        println!("Network mode changed to {:?}", mode);
         self.network_mode = mode;
     }
 }
@@ -127,12 +121,21 @@ pub fn run() {
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_store::Builder::default().build())
         .setup(|app| {
+            println!("Setting up app");
+            config::load_configuration(app)?;
+
             let local_state = LocalState::new(app);
             let remote_state = RemoteState::new();
 
             let state = AppState::new(local_state, remote_state);
+            let mut network_monitor = NetworkMonitor::new();
 
-            app.manage(state);
+            let state_arc = Arc::new(Mutex::new(state));
+
+            network_monitor.add_listener(state_arc.clone());
+            network_monitor.monitor();
+
+            app.manage(state_arc);
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![

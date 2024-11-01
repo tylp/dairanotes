@@ -1,6 +1,7 @@
 use anyhow::Result;
 use async_trait::async_trait;
 
+pub mod network_service;
 pub mod note_service;
 pub mod user_service;
 

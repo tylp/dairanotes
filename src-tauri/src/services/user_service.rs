@@ -71,8 +71,11 @@ pub struct RemoteUserService {
 }
 
 impl RemoteUserService {
-    pub fn new(slug: String, client: HttpClientImpl) -> Self {
-        Self { client, slug }
+    pub fn new(client: HttpClientImpl) -> Self {
+        Self {
+            client,
+            slug: "/users".to_string(),
+        }
     }
 }
 
