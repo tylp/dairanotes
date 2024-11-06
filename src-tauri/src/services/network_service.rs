@@ -1,4 +1,4 @@
-use std::{sync::Arc, time::Duration};
+use std::{fmt::Display, sync::Arc, time::Duration};
 
 use async_trait::async_trait;
 use tauri::async_runtime::Mutex;
@@ -6,10 +6,32 @@ use tauri_plugin_http::reqwest;
 
 use crate::config;
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Clone, Copy, Eq)]
+pub enum FrontEndEvent {
+    NetworkMode,
+}
+
+impl Display for FrontEndEvent {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            FrontEndEvent::NetworkMode => write!(f, "NetworkMode"),
+        }
+    }
+}
+
+#[derive(Debug, PartialEq, Clone, Copy, Eq)]
 pub enum NetworkMode {
     Local,
     Remote,
+}
+
+impl Display for NetworkMode {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            NetworkMode::Local => write!(f, "Local"),
+            NetworkMode::Remote => write!(f, "Remote"),
+        }
+    }
 }
 
 #[async_trait]

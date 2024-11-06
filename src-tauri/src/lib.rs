@@ -2,11 +2,11 @@ use std::sync::Arc;
 
 use async_trait::async_trait;
 use services::{
-    network_service::{NetworkListener, NetworkMode, NetworkMonitor},
+    network_service::{FrontEndEvent, NetworkListener, NetworkMode, NetworkMonitor},
     note_service::{LocalNoteService, NoteService, RemoteNoteService},
     user_service::{LocalUserService, RemoteUserService, UserService},
 };
-use tauri::async_runtime::Mutex;
+use tauri::{async_runtime::Mutex, AppHandle, Emitter, EventTarget};
 use tauri::{App, Builder, Manager};
 use tauri_plugin_store::StoreExt;
 use utils::http::HttpClientImpl;
@@ -86,10 +86,11 @@ struct AppState {
     network_mode: NetworkMode,
     local_service: LocalState,
     remote_service: RemoteState,
+    app: AppHandle,
 }
 
 impl AppState {
-    fn new(local: LocalState, remote: RemoteState) -> Self {
+    fn new(local: LocalState, remote: RemoteState, app: AppHandle) -> Self {
         let local_state = local;
         let remote_state = remote;
 
@@ -97,6 +98,7 @@ impl AppState {
             network_mode: NetworkMode::Local,
             local_service: local_state,
             remote_service: remote_state,
+            app,
         }
     }
 
@@ -111,6 +113,13 @@ impl AppState {
 impl NetworkListener for AppState {
     fn notify(&mut self, mode: NetworkMode) {
         println!("Network mode changed to {:?}", mode);
+
+        let _ = self.app.emit_to(
+            EventTarget::any(),
+            FrontEndEvent::NetworkMode.to_string().as_str(),
+            mode.to_string(),
+        );
+
         self.network_mode = mode;
     }
 }
@@ -127,11 +136,12 @@ pub fn run() {
             let local_state = LocalState::new(app);
             let remote_state = RemoteState::new();
 
-            let state = AppState::new(local_state, remote_state);
-            let mut network_monitor = NetworkMonitor::new();
+            let handle = app.handle().clone();
 
+            let state = AppState::new(local_state, remote_state, handle);
             let state_arc = Arc::new(Mutex::new(state));
 
+            let mut network_monitor = NetworkMonitor::new();
             network_monitor.add_listener(state_arc.clone());
             network_monitor.monitor();
 
